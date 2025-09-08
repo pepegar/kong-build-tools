@@ -35,6 +35,14 @@
     sha256 = "sha256-y0xu1WEomyHOeYq0XthyBishlLHzK63LwHMLvPdWZQo=";
   };
 
+  # lua-resty-cors module
+  luaRestyCors = fetchFromGitHub {
+    owner = "detailyang";
+    repo = "lua-resty-cors";
+    rev = "006a1adacf7027c451cb10fe1a86784e73c816ac";
+    sha256 = "sha256-K3p73BeD5xx3wxL4A/rrD+AOXrOQIKo/zq6OTOk+Pww=";
+  };
+
   # LuaRocks source (will be built after OpenResty)
   luarocksSrc = fetchurl {
     url = "https://luarocks.org/releases/luarocks-${luarocksVersion}.tar.gz";
@@ -239,6 +247,13 @@ in
       ln -sf ${luajitPackages.luafilesystem}/lib/lua/5.1/lfs.so $out/luajit/lib/lua/5.1/
       # Also create a symlink in the lualib directory for OpenResty compatibility
       ln -sf ${luajitPackages.luafilesystem}/lib/lua/5.1/lfs.so $out/lualib/
+
+      # Install lua-resty-cors module
+      mkdir -p $out/lualib/resty
+      cp ${luaRestyCors}/lib/resty/cors.lua $out/lualib/resty/
+      # Also install in the standard Lua path
+      mkdir -p $out/luajit/share/lua/5.1/resty
+      cp ${luaRestyCors}/lib/resty/cors.lua $out/luajit/share/lua/5.1/resty/
     '';
 
     # Add runtime dependencies
