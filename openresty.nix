@@ -14,6 +14,7 @@
   patch,
   pkg-config,
   unzip,
+  luajitPackages,
 }: let
   # Versions matching the original script
   openrestyVersion = "1.21.4.1";
@@ -64,6 +65,7 @@ in
       zlib
       pcre
       openssl # Ensure OpenSSL 1.1.1 is the only OpenSSL available
+      luajitPackages.luafilesystem
     ];
 
     hardeningDisable = ["format"];
@@ -230,6 +232,13 @@ in
       # Create symlinks for compatibility
       mkdir -p $out/openresty
       ln -sf $out/* $out/openresty/
+
+      # Configure Lua paths for luafilesystem module
+      mkdir -p $out/lualib $out/luajit/lib/lua/5.1
+      # Create symlink to luafilesystem module in the standard Lua path
+      ln -sf ${luajitPackages.luafilesystem}/lib/lua/5.1/lfs.so $out/luajit/lib/lua/5.1/
+      # Also create a symlink in the lualib directory for OpenResty compatibility
+      ln -sf ${luajitPackages.luafilesystem}/lib/lua/5.1/lfs.so $out/lualib/
     '';
 
     # Add runtime dependencies

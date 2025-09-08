@@ -19,6 +19,8 @@
         openresty = pkgs.callPackage ./openresty.nix { 
           # Use OpenSSL 1.1.1 instead of the default OpenSSL 3.x
           openssl = pkgs.openssl_1_1;
+          # Pass LuaJIT packages for luafilesystem module
+          luajitPackages = pkgs.luajitPackages;
         };
       in
       {
