@@ -1,0 +1,12 @@
+--- a/src/ssl/ngx_lua_kong_ssl.c
++++ b/src/ssl/ngx_lua_kong_ssl.c
+@@ -305,7 +305,7 @@
+ 
+ 
+ static X509 *
+-ngx_lua_kong_ssl_x509_copy(X509 *in)
++ngx_lua_kong_ssl_x509_copy(const X509 *in)
+ {
+-    return X509_up_ref(in) == 0 ? NULL : in;
++    return X509_up_ref((X509*)in) == 0 ? NULL : (X509*)in;
+ }

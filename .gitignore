@@ -6,3 +6,4 @@ kong_license.private
 *.rpm
 openresty-build-tools/build
 github-token
+result
